@@ -8,9 +8,12 @@ import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Reque
 class RestfulController @Inject()(cc: ControllerComponents, repository: RestfulRepository) extends AbstractController(cc) {
 
 
-  def getResult() = Action { implicit request =>
-    println(request.body)
-    println(request.contentType)
-    Ok(repository.getResults() + "[" + request + "]")
+  def getResult(id: String) = Action { implicit request =>
+    Ok(repository.getResults() + "[" + id + "]")
   }
+
+  def getResultWith(id: String, name: String, age: Int) = Action { implicit request =>
+    Ok(repository.getResults() + "| " + id + "| " + name + "| " + age)
+  }
+
 }

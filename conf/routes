@@ -5,7 +5,7 @@
 
 # An example controller showing a sample home page
 GET        /                    controllers.HomeController.index
-GET        /result              controllers.RestfulController.getResult
+GET        /result/:id              controllers.RestfulController.getResult(id)
 
 #SIRD方式的路由
 ->         /restful             router.RestfulRouter
