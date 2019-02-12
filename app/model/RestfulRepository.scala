@@ -1,9 +1,9 @@
 package model
 
-class RestfulRepository {
+class RestfulRepository extends Repository {
 
+  @Override
   def getResults(): String = {
     "RestfulRepository#getResults"
   }
-
 }

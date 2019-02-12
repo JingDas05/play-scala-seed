@@ -1,11 +1,11 @@
 package controllers
 
 import javax.inject.{Inject, Singleton}
-import model.RestfulRepository
+import model.{Repository, RestfulRepository}
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
 
 @Singleton
-class RestfulController @Inject()(cc: ControllerComponents, repository: RestfulRepository) extends AbstractController(cc) {
+class RestfulController @Inject()(cc: ControllerComponents, repository: Repository) extends AbstractController(cc) {
 
 
   def getResult(id: String) = Action { implicit request =>
