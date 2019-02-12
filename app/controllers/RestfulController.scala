@@ -9,6 +9,8 @@ class RestfulController @Inject()(cc: ControllerComponents, repository: RestfulR
 
 
   def getResult() = Action { implicit request =>
+    println(request.body)
+    println(request.contentType)
     Ok(repository.getResults() + "[" + request + "]")
   }
 }
