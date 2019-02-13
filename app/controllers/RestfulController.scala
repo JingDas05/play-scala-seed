@@ -1,6 +1,5 @@
 package controllers
 
-import java.lang
 
 import javax.inject.{Inject, Singleton}
 import model.{Repository, RestfulRepository}
@@ -27,11 +26,13 @@ class RestfulController @Inject()(cc: ControllerComponents, repository: Reposito
     val body: AnyContent = request.body
     val jsonBody: Option[JsValue] = body.asJson
 
-    println((jsonBody.get \ "name").get)
-    println(jsonBody.get("name"))
+    //println((jsonBody.get \ "name").get)
+    //println(jsonBody.get("name"))
+
+    val person = repository.createPerson(jsonBody.get("name").as[String], jsonBody.get("age").as[Int])
     // 反序列化
-    val person: JsResult[Person] = Json.fromJson[Person](jsonBody.get)
-    println(person.get.name)
-    Ok("post with body")
+    //val person: JsResult[Person] = Json.fromJson[Person](jsonBody.get)
+    //println(person.get.name)
+    Ok(person.isCompleted.toString)
   }
 }
