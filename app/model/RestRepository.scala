@@ -15,14 +15,8 @@ class RestRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPro
   // 引入 slick DSL
   import profile.api._
 
-  override def getResults(): String = {
-    getAllPerson
-    "RestRepository#getResults"
-  }
-
-
   //  查询对象
-  private class PersonTable(tag: Tag) extends Table[Person](tag, "people") {
+  private class UserTable(tag: Tag) extends Table[User](tag, "people") {
 
     def id = column[Long]("id", O.PrimaryKey, O.AutoInc)
 
@@ -30,25 +24,39 @@ class RestRepository @Inject()(protected val dbConfigProvider: DatabaseConfigPro
 
     def age = column[Int]("age")
 
-    override def * = (id, name, age) <> ((Person.apply _).tupled, Person.unapply)
+    override def * = (id, name, age) <> ((User.apply _).tupled, User.unapply)
   }
 
-  private val people = TableQuery[PersonTable]
+  private val user = TableQuery[UserTable]
 
-  def createPerson(name: String, age: Int): Future[Person] = db.run {
+  def createUser(person: User): Future[User] = db.run {
     // We create a projection of just the name and age columns, since we're not inserting a value for the id column
-    (people.map(p => (p.name, p.age))
+    (user.map(p => (p.name, p.age))
       // Now define it to return the id, because we want to know what id was generated for the person
-      returning people.map(_.id)
+      returning user.map(_.id)
       // And we define a transformation for the returned value, which combines our original parameters with the
       // returned id
-      into ((nameAge, id) => Person(id, nameAge._1, nameAge._2))
+      into ((nameAge, id) => User(id, nameAge._1, nameAge._2))
       // And finally, insert the person into the database
-      ) += (name, age)
+      ) += (person.name, person.age)
   }
 
-  def getAllPerson: Future[Seq[Person]] = db.run {
-    people.result
+  def getUsers: Future[Seq[User]] = db.run {
+    user.result
   }
 
+  def updateUserBy(person: User): Unit = {
+    user.filter(_.id === person.id)
+      .map(p => (p.name, p.age))
+      .update(("sas", 5432))
+
+  }
+
+  def deleteUserBy(id: Long) {
+    user.filter(person => person.id === id).delete
+  }
+
+  def getUserBy(id: Long): Future[Seq[User]] = db.run {
+    user.filter(user => user.id === id).result
+  }
 }

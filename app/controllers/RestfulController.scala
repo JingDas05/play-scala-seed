@@ -2,37 +2,59 @@ package controllers
 
 
 import javax.inject.{Inject, Singleton}
-import model.{Repository, RestfulRepository}
+import model.{Repository, RestfulRepository, User}
 import play.api.libs.json._
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
+
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class RestfulController @Inject()(cc: ControllerComponents, repository: Repository) extends AbstractController(cc) {
 
-  // 定义类和隐私转换参数
-  case class Person(name: String, age: Int)
 
-  implicit val personReads = Json.reads[Person]
+  implicit val personReads = Json.reads[model.User]
+  implicit val ec = ExecutionContext.global
 
-  def getResult(id: String) = Action { implicit request =>
-    Ok(repository.getResults() + "[" + id + "]")
+  def getUserBy(id: String) = Action.async { implicit request =>
+    repository.getUserBy(id.toLong).map {
+      users => Ok(users.head.toString)
+    }
   }
 
-  def getResultWith(id: String, name: String, age: Int) = Action { implicit request =>
-    Ok(repository.getResults() + "| " + id + "| " + name + "| " + age)
+  def getUsers() = Action.async { implicit request: Request[AnyContent] =>
+    repository.getUsers.map(users => Ok(users.toString))
+
   }
 
-  def postResult() = Action { implicit request: Request[AnyContent] =>
+  def createUser() = Action.async { implicit request: Request[AnyContent] =>
     val body: AnyContent = request.body
     val jsonBody: Option[JsValue] = body.asJson
 
     //println((jsonBody.get \ "name").get)
     //println(jsonBody.get("name"))
 
-    val person = repository.createPerson(jsonBody.get("name").as[String], jsonBody.get("age").as[Int])
+    val person = repository.createUser(User(0, jsonBody.get("name").as[String], jsonBody.get("age").as[Int]))
     // 反序列化
     //val person: JsResult[Person] = Json.fromJson[Person](jsonBody.get)
     //println(person.get.name)
-    Ok(person.isCompleted.toString)
+    person.flatMap(p => Future.successful(p))
+    person.map { p =>
+      Ok(p.name)
+    }
   }
+
+  def updateUserBy() = Action { implicit request: Request[AnyContent] =>
+    val body: AnyContent = request.body
+    val jsonBody: Option[JsValue] = body.asJson
+    // 反序列化
+    val person: JsResult[model.User] = Json.fromJson[model.User](jsonBody.get)
+    repository.updateUserBy(person.get)
+    Ok
+  }
+
+  def deleteUserBy(id: String) = Action { implicit request: Request[AnyContent] =>
+    repository.deleteUserBy(id.asInstanceOf[Long])
+    Ok("ok")
+  }
+
 }

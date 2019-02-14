@@ -4,12 +4,15 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET        /                    controllers.HomeController.index
-GET        /result/:id          controllers.RestfulController.getResult(id)
-POST       /result              controllers.RestfulController.postResult
+GET           /                    controllers.HomeController.index
+GET           /user/:id            controllers.RestfulController.getUserBy(id)
+GET           /users               controllers.RestfulController.getUsers
+POST          /user                controllers.RestfulController.createUser
+DELETE        /user/:id            controllers.RestfulController.deleteUserBy(id)
+PUT           /user                controllers.RestfulController.updateUserBy()
 
 #SIRD方式的路由
-->         /restful             router.RestfulRouter
+->            /restful             router.RestfulRouter
 
 # Map static resources from the /public folder to the /assets URL path
-GET        /assets/*file        controllers.Assets.versioned(path="/public", file: Asset)
+GET           /assets/*file        controllers.Assets.versioned(path="/public", file: Asset)

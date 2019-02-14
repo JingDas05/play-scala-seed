@@ -7,7 +7,13 @@ import scala.concurrent.Future
 @ImplementedBy(classOf[RestRepository])
 trait Repository {
 
-  def getResults(): String
+  def createUser(person: User): Future[User]
 
-  def createPerson(name: String, age: Int): Future[Person]
+  def deleteUserBy(id: Long)
+
+  def updateUserBy(person: User): Unit
+
+  def getUserBy(id: Long): Future[Seq[User]]
+
+  def getUsers: Future[Seq[User]]
 }
