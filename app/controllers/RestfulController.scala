@@ -1,15 +1,20 @@
 package controllers
 
 
+import batch.JobAction
 import javax.inject.{Inject, Singleton}
 import model.{Repository, RestfulRepository, User}
+import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
+import play.api.Play
 import play.api.libs.json._
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RestfulController @Inject()(cc: ControllerComponents, repository: Repository) extends AbstractController(cc) {
+class RestfulController @Inject()(cc: ControllerComponents,
+                                  repository: Repository,
+                                  jobAction: JobAction) extends AbstractController(cc) {
 
 
   implicit val personReads = Json.reads[model.User]
@@ -22,6 +27,7 @@ class RestfulController @Inject()(cc: ControllerComponents, repository: Reposito
   }
 
   def getUsers() = Action.async { implicit request: Request[AnyContent] =>
+    jobAction.test()
     repository.getUsers.map(users => Ok(users.toString))
 
   }
