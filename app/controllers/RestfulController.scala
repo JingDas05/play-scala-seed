@@ -34,6 +34,10 @@ class RestfulController @Inject()(cc: ControllerComponents, repository: Reposito
     //println(jsonBody.get("name"))
 
     val person = repository.createUser(User(0, jsonBody.get("name").as[String], jsonBody.get("age").as[Int]))
+
+    val id = jsonBody.get("id")
+    println(id)
+
     // 反序列化
     //val person: JsResult[Person] = Json.fromJson[Person](jsonBody.get)
     //println(person.get.name)
@@ -43,11 +47,25 @@ class RestfulController @Inject()(cc: ControllerComponents, repository: Reposito
     }
   }
 
+//  def createUser() = Action.async(parse.tolerantJson) { implicit request =>
+//
+//    request.body.validate[]
+//
+//    // 反序列化
+//    //val person: JsResult[Person] = Json.fromJson[Person](jsonBody.get)
+//    //println(person.get.name)
+//    person.flatMap(p => Future.successful(p))
+//    person.map { p =>
+//      Ok(p.name)
+//    }
+//  }
+
   def updateUserBy() = Action { implicit request: Request[AnyContent] =>
     val body: AnyContent = request.body
     val jsonBody: Option[JsValue] = body.asJson
     // 反序列化
     val person: JsResult[model.User] = Json.fromJson[model.User](jsonBody.get)
+    println(person.get.id)
     repository.updateUserBy(person.get)
     Ok
   }
