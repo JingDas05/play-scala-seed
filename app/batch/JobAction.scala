@@ -12,7 +12,7 @@ import scala.collection.JavaConverters
 class JobAction @Inject()() {
 
   // 初始化Spring batch
-  lazy val batchContext = new AnnotationConfigApplicationContext("batch/job")
+  lazy val batchContext = new AnnotationConfigApplicationContext("batch/job", "batch/config")
 
   // Any 支持 STRING, DATETIME, LONG, DOUBLE 四种类型
   def startJob(params: Option[Map[String, Any]] = None): JobExecution = {

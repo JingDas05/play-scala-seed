@@ -5,7 +5,7 @@ import org.springframework.batch.core.JobParameter
 
 object JobUtils {
 
-  // scala param-> java param
+  // scala param -> java param
   def getJobParameter(parameter: Any): JobParameter = {
     parameter match {
       case long: Long =>

@@ -6,9 +6,16 @@ import org.springframework.batch.item.ParseException;
 import org.springframework.batch.item.UnexpectedInputException;
 
 public class DeviceIdRdeader implements ItemReader<String> {
+
+    private int limit = 10;
+    private int current = 0;
+
     @Override
     public String read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-
-        return "-----in-----" + System.currentTimeMillis();
+        if (current < limit) {
+            current++;
+            return "-----in-----" + System.currentTimeMillis();
+        }
+        return null;
     }
 }

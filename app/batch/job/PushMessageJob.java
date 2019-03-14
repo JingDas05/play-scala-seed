@@ -1,11 +1,10 @@
-package batch.job.conf;
+package batch.job;
 
 import batch.job.step.DeviceIdProcessor;
 import batch.job.step.DeviceIdRdeader;
 import batch.job.step.DeviceIdWriter;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
-import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.item.ItemProcessor;
@@ -17,8 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import javax.annotation.Resource;
 
 @Configuration
-@EnableBatchProcessing
-public class JobConfig {
+public class PushMessageJob {
 
 
     @Resource
@@ -27,15 +25,15 @@ public class JobConfig {
     @Resource
     private StepBuilderFactory stepBuilderFactory;
 
-    @Bean
+    @Bean()
     public Job deviceIdJob() {
         return jobBuilderFactory.get("deviceIdJob")
                 .start(step())
                 .build();
     }
 
-    @Bean
-    protected Step step() {
+
+    private Step step() {
         return stepBuilderFactory.get("step")
                 .<String, String>chunk(1)
                 .reader(reader())
@@ -45,18 +43,16 @@ public class JobConfig {
     }
 
 
-    @Bean
-    public ItemReader<String> reader() {
+
+    private ItemReader<String> reader() {
         return new DeviceIdRdeader();
     }
 
-    @Bean
-    public ItemProcessor<String, String> processor() {
+    private ItemProcessor<String, String> processor() {
         return new DeviceIdProcessor();
     }
 
-    @Bean
-    public ItemWriter<String> writer() {
+    private ItemWriter<String> writer() {
         return new DeviceIdWriter();
     }
 }
