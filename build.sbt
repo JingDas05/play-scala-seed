@@ -38,5 +38,7 @@ libraryDependencies ++= Seq(
 
 libraryDependencies += "org.hashids" % "hashids" % "1.0.1"
 
+//spring batch
 libraryDependencies += "org.springframework.batch" % "spring-batch-core" % "4.1.1.RELEASE"
 libraryDependencies += "org.apache.commons" % "commons-dbcp2" % "2.5.0"
+libraryDependencies += "org.springframework" % "spring-jdbc" % "5.1.4.RELEASE"

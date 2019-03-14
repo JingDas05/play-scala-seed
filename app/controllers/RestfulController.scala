@@ -27,7 +27,7 @@ class RestfulController @Inject()(cc: ControllerComponents,
   }
 
   def getUsers() = Action.async { implicit request: Request[AnyContent] =>
-    jobAction.test()
+    jobAction.start()
     repository.getUsers.map(users => Ok(users.toString))
 
   }
