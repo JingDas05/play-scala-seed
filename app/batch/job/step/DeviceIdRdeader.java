@@ -8,6 +8,7 @@ import org.springframework.batch.item.UnexpectedInputException;
 public class DeviceIdRdeader implements ItemReader<String> {
     @Override
     public String read() throws Exception, UnexpectedInputException, ParseException, NonTransientResourceException {
-        return "id";
+
+        return "-----in-----" + System.currentTimeMillis();
     }
 }

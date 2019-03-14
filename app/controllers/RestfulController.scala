@@ -4,6 +4,7 @@ package controllers
 import batch.JobAction
 import javax.inject.{Inject, Singleton}
 import model.{Repository, RestfulRepository, User}
+import org.joda.time.DateTime
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import play.api.Play
 import play.api.libs.json._
@@ -27,7 +28,7 @@ class RestfulController @Inject()(cc: ControllerComponents,
   }
 
   def getUsers() = Action.async { implicit request: Request[AnyContent] =>
-    jobAction.start()
+    jobAction.startJob(Option(Map("a" -> "b", "b" -> DateTime.now())))
     repository.getUsers.map(users => Ok(users.toString))
 
   }
@@ -53,18 +54,18 @@ class RestfulController @Inject()(cc: ControllerComponents,
     }
   }
 
-//  def createUser() = Action.async(parse.tolerantJson) { implicit request =>
-//
-//    request.body.validate[]
-//
-//    // 反序列化
-//    //val person: JsResult[Person] = Json.fromJson[Person](jsonBody.get)
-//    //println(person.get.name)
-//    person.flatMap(p => Future.successful(p))
-//    person.map { p =>
-//      Ok(p.name)
-//    }
-//  }
+  //  def createUser() = Action.async(parse.tolerantJson) { implicit request =>
+  //
+  //    request.body.validate[]
+  //
+  //    // 反序列化
+  //    //val person: JsResult[Person] = Json.fromJson[Person](jsonBody.get)
+  //    //println(person.get.name)
+  //    person.flatMap(p => Future.successful(p))
+  //    person.map { p =>
+  //      Ok(p.name)
+  //    }
+  //  }
 
   def updateUserBy() = Action { implicit request: Request[AnyContent] =>
     val body: AnyContent = request.body

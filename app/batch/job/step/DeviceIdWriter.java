@@ -9,6 +9,7 @@ public class DeviceIdWriter implements ItemWriter<String> {
     public void write(List<? extends String> items) throws Exception {
         for (String each : items) {
             System.out.println(each);
+            Thread.sleep(300);
         }
     }
 }
