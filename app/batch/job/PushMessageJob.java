@@ -7,9 +7,12 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -25,34 +28,37 @@ public class PushMessageJob {
     @Resource
     private StepBuilderFactory stepBuilderFactory;
 
-    @Bean()
-    public Job deviceIdJob() {
+    @Bean("deviceIdJob")
+    public Job deviceIdJob(@Qualifier("deviceIdStep") Step step) {
         return jobBuilderFactory.get("deviceIdJob")
-                .start(step())
+                .start(step)
                 .build();
     }
 
 
-    private Step step() {
+    @Bean
+    public Step deviceIdStep(@Qualifier("deviceIdReader")ItemReader<String> itemReader ) {
         return stepBuilderFactory.get("step")
                 .<String, String>chunk(1)
-                .reader(reader())
-                .processor(processor())
-                .writer(writer())
+                .reader(itemReader)
+                .processor(deviceIdProcessor())
+                .writer(deviceIdWriter())
                 .build();
     }
 
-
-
-    private ItemReader<String> reader() {
+    @Bean
+    @StepScope
+    public ItemReader<String> deviceIdReader(@Value("#{jobParameters[messageId]}") String messageId) {
         return new DeviceIdRdeader();
     }
 
-    private ItemProcessor<String, String> processor() {
+    @Bean
+    public ItemProcessor<String, String> deviceIdProcessor() {
         return new DeviceIdProcessor();
     }
 
-    private ItemWriter<String> writer() {
+    @Bean
+    public ItemWriter<String> deviceIdWriter() {
         return new DeviceIdWriter();
     }
 }

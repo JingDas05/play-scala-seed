@@ -7,7 +7,7 @@ import org.springframework.batch.item.UnexpectedInputException;
 
 public class DeviceIdRdeader implements ItemReader<String> {
 
-    private int limit = 10;
+    private int limit = 5;
     private int current = 0;
 
     @Override

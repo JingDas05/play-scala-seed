@@ -9,6 +9,7 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import play.api.Play
 import play.api.libs.json._
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
+import service.ServiceComponentHandler
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -28,7 +29,10 @@ class RestfulController @Inject()(cc: ControllerComponents,
   }
 
   def getUsers() = Action.async { implicit request: Request[AnyContent] =>
-    jobAction.startJob(Option(Map("a" -> "b", "b" -> DateTime.now())))
+//    jobAction.startJob(Option(Map("a" -> "b", "b" -> DateTime.now())))
+    //    jobAction.startJob(Option(Map("messageId" -> "256", "stepName" -> "stepName")))
+    //    jobAction.startJob(None)
+//    new ServiceComponentHandler().use()
     repository.getUsers.map(users => Ok(users.toString))
 
   }
