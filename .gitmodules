@@ -1,0 +1,3 @@
+[submodule "growing-micros"]
+	path = growing-micros
+	url = ssh://vcs-user@codes.growingio.com/diffusion/221/growing-micros.git

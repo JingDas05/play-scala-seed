@@ -3,6 +3,12 @@ organization := "com.example"
 
 version := "1.0-SNAPSHOT"
 
+//lazy val micro = project in file("growing-micros")
+//lazy val root = (project in file("."))
+//  .enablePlugins(PlayScala)
+//  .aggregate(micro)
+//  .dependsOn(micro)
+
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 scalaVersion := "2.12.8"
