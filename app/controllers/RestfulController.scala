@@ -10,13 +10,14 @@ import play.api.Play
 import play.api.libs.json._
 import play.api.mvc.{AbstractController, AnyContent, ControllerComponents, Request}
 import service.ServiceComponentHandler
+import test.JsonTest
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class RestfulController @Inject()(cc: ControllerComponents,
                                   repository: Repository,
-                                  jobAction: JobAction) extends AbstractController(cc) {
+                                  jobAction: JobAction, jsonTest: JsonTest) extends AbstractController(cc) {
 
 
   implicit val personReads = Json.reads[model.User]
@@ -33,6 +34,7 @@ class RestfulController @Inject()(cc: ControllerComponents,
     //    jobAction.startJob(Option(Map("messageId" -> "256", "stepName" -> "stepName")))
     //    jobAction.startJob(None)
 //    new ServiceComponentHandler().use()
+    jsonTest.test
     repository.getUsers.map(users => Ok(users.toString))
 
   }

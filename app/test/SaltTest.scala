@@ -11,7 +11,8 @@ object SaltTest {
 
     val hashId = new Hashids(salt, 8)
 
-     println(hashId.encode(1))
-
+//     println(hashId.encode(1))
+     println(hashId.decode("QGPnd29Y").headOption)
+//     println(hashId.decode("nxog09md").headOption)
   }
 }
